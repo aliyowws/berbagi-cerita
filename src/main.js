@@ -62,7 +62,7 @@ window.addEventListener('load', () => {
         Notification.requestPermission().then((permission) => {
             if (permission === 'granted') {
                 console.log("✅ Izin notifikasi diberikan");
-                initPush(); 
+                initPush();
             } else {
                 console.warn("❌ Izin notifikasi ditolak atau tidak dipilih");
             }
