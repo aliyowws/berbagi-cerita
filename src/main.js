@@ -58,7 +58,18 @@ window.addEventListener('load', () => {
 
     router();
 
-    initPush();
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+                console.log("✅ Izin notifikasi diberikan");
+                initPush(); 
+            } else {
+                console.warn("❌ Izin notifikasi ditolak atau tidak dipilih");
+            }
+        });
+    } else if (Notification.permission === 'granted') {
+        initPush(); 
+    }
 
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')
