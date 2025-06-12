@@ -7,14 +7,28 @@
   "theme_color": "#6200ea",
   "icons": [
     {
-      "src": "./assets/notif.png",
-      "sizes": "192x192",
+      "src": "/assets/notif.png",
+      "sizes": "144x144",
       "type": "image/png"
     },
     {
-      "src": "./assets/notif.png",
+      "src": "/assets/notif.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshots/mobile-home.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "assets/screenshots/desktop-home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
     }
   ]
 }

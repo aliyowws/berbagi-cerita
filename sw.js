@@ -6,7 +6,6 @@ const urlsToCache = [
   '/src/style.css',
   '/src/main.js',
   '/assets/notif.png',
-  './assets/notif.png', 
 ];
 
 self.addEventListener('install', (event) => {
