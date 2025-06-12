@@ -10,7 +10,7 @@ const urlsToCache = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll([...new Set(urlsToCache)])) 
+    caches.open(CACHE_NAME).then(cache => cache.addAll([...new Set(urlsToCache)]))
   );
   self.skipWaiting(); 
 });
@@ -22,12 +22,14 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('push', function (event) {
+  console.log('[SW] Push event received');
+
   let payload = {
     title: 'Notifikasi Baru',
     options: {
       body: 'Ada cerita baru yang berhasil dibuat!',
-      icon: './assets/notif.png',
-      badge: './assets/notif.png',
+      icon: '/public/assets/notif.png',
+      badge: '/public/assets/notif.png',
     }
   };
 
@@ -36,6 +38,7 @@ self.addEventListener('push', function (event) {
     payload.title = data.title;
     payload.options = data.options;
   } catch (e) {
+    console.warn('[SW] No JSON data in push event');
   }
 
   event.waitUntil(
