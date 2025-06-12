@@ -8,13 +8,15 @@
   "icons": [
     {
       "src": "/assets/notif.png",
-      "sizes": "144x144",
-      "type": "image/png"
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/assets/notif.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose" :"any"
     }
   ],
   "screenshots": [
