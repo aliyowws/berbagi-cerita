@@ -4,33 +4,25 @@
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#6200ea",
+  "theme_color": "#6200ee",
   "icons": [
     {
-      "src": "/public/assets/notif.png",
+      "src": "/assets/notif.png",
       "sizes": "256x256",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "/public/assets/notif.png",
-      "sizes": "256x256",
-      "type": "image/png",
-      "purpose" :"any"
     }
   ],
   "screenshots": [
     {
-      "src": "/public/assets/desktop-home.png",
+      "src": "/assets/screenshots/mobile-home.png",
       "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow"
+      "type": "image/png"
     },
     {
-      "src": "/public/assets/mobile-home.png",
+      "src": "/assets/screenshots/desktop-home.png",
       "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
+      "type": "image/png"
     }
   ]
 }
