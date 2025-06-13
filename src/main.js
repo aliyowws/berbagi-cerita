@@ -3,6 +3,10 @@ import { router, navigateTo } from './scripts/router.js';
 import { stopCamera } from './scripts/presenters/addStoryPresenter.js';
 import { initPush } from './scripts/notif-init.js';
 
+async function handlePendingPushSubscription() {
+  return false;
+}
+
 window.addEventListener('load', () => {
     const logoutLink = document.getElementById('logoutLink');
     const loginLink = document.getElementById('loginLink');
@@ -20,7 +24,8 @@ window.addEventListener('load', () => {
             if (logoutLink) logoutLink.style.display = 'inline';
             if (loginLink) loginLink.style.display = 'none';
             if (registerLink) registerLink.style.display = 'none';
-
+            
+            
             handlePendingPushSubscription().then(result => {
                 if (result) {
                     console.log('✅ Pending push subscription berhasil diproses');
@@ -28,6 +33,7 @@ window.addEventListener('load', () => {
             }).catch(err => {
                 console.warn('⚠️ Gagal memproses pending push subscription:', err);
             });
+            
 
         } else {
             if (logoutLink) logoutLink.style.display = 'none';
@@ -135,6 +141,7 @@ window.addEventListener('load', () => {
                 console.warn('Gagal initialize push setelah login:', err);
             });
         }
+        navigateTo('/tambah');
     });
 });
 
