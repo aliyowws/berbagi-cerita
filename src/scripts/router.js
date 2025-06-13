@@ -13,68 +13,60 @@ import { renderFavorites } from './presenters/favoritePresenter.js';
 const routes = {
   '/': {
     view: homeView,
-    afterRender: renderStories,
-    beforeRender: stopCamera  
+    beforeRender: stopCamera,
+    afterRender: renderStories
   },
   '/tambah': {
     view: addStoryView,
-    afterRender: setupAddStory,
-    beforeRender: stopCamera
+    beforeRender: () => {}, // Jangan panggil stopCamera di sini
+    afterRender: setupAddStory
   },
   '/login': {
     view: loginView,
-    afterRender: setupLogin,
-    beforeRender: stopCamera
+    beforeRender: stopCamera,
+    afterRender: setupLogin
   },
   '/register': {
     view: registerView,
-    afterRender: setupRegister,
-    beforeRender: stopCamera
+    beforeRender: stopCamera,
+    afterRender: setupRegister
   },
   '/favorit': {
-  view: {
-    render: () => `
-      <section>
-        <h2>Memuat Favorit...</h2>
-        <div id="favorite-list"></div>
-      </section>
-    `
-  },
-  afterRender: renderFavorites,
-  beforeRender: () => {}
-},
-
+    view: {
+      render: () => `
+        <section>
+          <h2>Memuat Favorit...</h2>
+          <div id="favorite-list"></div>
+        </section>
+      `
+    },
+    beforeRender: stopCamera,
+    afterRender: renderFavorites
+  }
 };
 
 let previousHash = location.hash.slice(1).toLowerCase() || '/';
 
 export const navigateTo = (path) => {
   if (window.location.hash === `#${path}`) {
-
-    router();
+    router(); // Tetap render ulang jika hash sama
   } else {
     window.location.hash = path;
   }
 };
-;
 
 export const router = () => {
   const currentHash = location.hash.slice(1).toLowerCase() || '/';
   const route = routes[currentHash];
   const mainContent = document.getElementById('main-content');
-  
 
   if (!mainContent) {
     console.error('Elemen #main-content tidak ditemukan di DOM.');
     return;
   }
 
-  if (previousHash === '/tambah' && currentHash !== '/tambah') {
-    stopCamera();
-  }
-
   if (route && route.beforeRender) {
-    route.beforeRender();
+    route.beforeRender(); // Stop kamera jika route menginstruksikan
   }
 
   const renderContent = () => {
@@ -92,11 +84,8 @@ export const router = () => {
     renderContent();
   }
 
-
   previousHash = currentHash;
 };
 
-
 window.addEventListener('hashchange', router);
-
 window.addEventListener('load', router);
