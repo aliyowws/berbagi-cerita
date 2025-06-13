@@ -1,11 +1,6 @@
-
 import { router, navigateTo } from './scripts/router.js';
 import { stopCamera } from './scripts/presenters/addStoryPresenter.js';
-import { initPush } from './scripts/notif-init.js';
-
-async function handlePendingPushSubscription() {
-  return false;
-}
+import { initPush, handlePendingPushSubscription, unsubscribePush } from './scripts/notif-init.js';
 
 window.addEventListener('load', () => {
     const logoutLink = document.getElementById('logoutLink');
@@ -25,7 +20,7 @@ window.addEventListener('load', () => {
             if (loginLink) loginLink.style.display = 'none';
             if (registerLink) registerLink.style.display = 'none';
             
-            
+            // Handle pending push subscription after login
             handlePendingPushSubscription().then(result => {
                 if (result) {
                     console.log('✅ Pending push subscription berhasil diproses');
@@ -33,8 +28,6 @@ window.addEventListener('load', () => {
             }).catch(err => {
                 console.warn('⚠️ Gagal memproses pending push subscription:', err);
             });
-            
-
         } else {
             if (logoutLink) logoutLink.style.display = 'none';
             if (loginLink) loginLink.style.display = 'inline';
@@ -58,7 +51,6 @@ window.addEventListener('load', () => {
             
             localStorage.removeItem('token');
             localStorage.removeItem('pendingPushSubscription'); // Clear any pending subscription
-            
             alert('Logout berhasil!');
             navigateTo('/login');   
             updateAuthLinks();
@@ -84,6 +76,7 @@ window.addEventListener('load', () => {
 
     router();
 
+    // Initialize push notifications
     const initializePushNotifications = async () => {
         if (!('Notification' in window)) {
             console.warn('Browser tidak mendukung notifikasi');
@@ -141,7 +134,6 @@ window.addEventListener('load', () => {
                 console.warn('Gagal initialize push setelah login:', err);
             });
         }
-        navigateTo('/tambah');
     });
 });
 
