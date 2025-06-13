@@ -20,8 +20,8 @@ export function setupAddStory() {
 
         if (!result.error) {
           addStoryView.showSuccess('Cerita berhasil dikirim!');
-          navigateTo('/');  
           addStoryView.disableCamera(); 
+          navigateTo('/');  
         } else {
           addStoryView.showError('Gagal mengirim: ' + result.message);
         }

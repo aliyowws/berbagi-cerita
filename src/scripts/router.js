@@ -66,7 +66,7 @@ export const router = () => {
   }
 
   if (route && route.beforeRender) {
-    route.beforeRender(); // Stop kamera jika route menginstruksikan
+    route.beforeRender(); 
   }
 
   const renderContent = () => {
