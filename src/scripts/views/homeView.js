@@ -99,7 +99,26 @@ const homeView = {
       mapInstance.remove();
       mapInstance = null;
     }
+  },
+
+  bindFavoriteHandler(handler) {
+    const buttons = document.querySelectorAll('.favorite-btn');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        handler(id);
+       });
+     });
+  },
+
+  showFavoriteSuccess() {
+    alert('✅ Cerita ditambahkan ke Favorit!');
+  },
+
+  showFavoriteError() {
+    alert('❌ Gagal menyimpan favorit.');
   }
+
 };
 
 export default homeView;

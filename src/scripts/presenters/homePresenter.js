@@ -1,8 +1,8 @@
 import { getStories } from '../models/storyApiModel.js';
 import { getToken } from '../models/authModel.js';
 import { getGeolocationName } from '../models/geolocationModel.js';
+import { saveFavorite } from '../models/favoriteModel.js';
 import homeView from '../views/homeView.js';
-import { FavoriteDB } from '/src/scripts/idb';
 
 export async function renderStories() {
   try {
@@ -31,20 +31,19 @@ export async function renderStories() {
 
     await homeView.renderStories(storiesWithLocation);
 
-    document.querySelectorAll('.favorite-btn').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const storyId = btn.dataset.id;
-        const story = storiesWithLocation.find((s) => s.id === storyId);
-        if (!story) return;
+    homeView.bindFavoriteHandler(async (id) => {
+      const story = storiesWithLocation.find((s) => s.id === id);
+      if (!story) return;
 
-        try {
-          await FavoriteDB.put(story);
-          alert('✅ Cerita ditambahkan ke Favorit!');
-        } catch (err) {
-          console.error('❌ Gagal menyimpan favorit:', err);
-        }
-      });
+      try {
+        await saveFavorite(story);
+        homeView.showFavoriteSuccess();
+      } catch (err) {
+        console.error('❌ Gagal simpan favorit:', err);
+        homeView.showFavoriteError();
+      }
     });
+
   } catch (error) {
     console.error('Error loading stories:', error);
     homeView.showError('Gagal memuat cerita. Silakan coba lagi.');

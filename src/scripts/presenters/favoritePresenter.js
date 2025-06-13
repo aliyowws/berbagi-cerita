@@ -1,5 +1,5 @@
 import favoriteView from '../views/favoriteView.js';
-import { FavoriteDB } from '/src/scripts/idb';
+import { getAllFavorites } from '../models/favoriteModel.js';
 
 export async function renderFavorites() {
   const mainContent = document.getElementById('main-content');
@@ -8,7 +8,7 @@ export async function renderFavorites() {
   mainContent.innerHTML = favoriteView.render();
 
   try {
-    const stories = await FavoriteDB.getAll();
+    const stories = await getAllFavorites(); // lewat model
     favoriteView.showStories(stories);
   } catch (error) {
     console.error('Gagal memuat cerita favorit:', error);
