@@ -14,22 +14,22 @@ const routes = {
   '/': {
     view: homeView,
     afterRender: renderStories,
-    beforeRender: () => {}  
+    beforeRender: stopCamera  
   },
   '/tambah': {
     view: addStoryView,
     afterRender: setupAddStory,
-    beforeRender: () => {} 
+    beforeRender: stopCamera
   },
   '/login': {
     view: loginView,
     afterRender: setupLogin,
-    beforeRender: () => {}
+    beforeRender: stopCamera
   },
   '/register': {
     view: registerView,
     afterRender: setupRegister,
-    beforeRender: () => {}
+    beforeRender: stopCamera
   },
   '/favorit': {
   view: {
