@@ -1,4 +1,4 @@
-import './style.css';
+
 import { router, navigateTo } from './scripts/router.js';
 import { stopCamera } from './scripts/presenters/addStoryPresenter.js';
 import { initPush } from './scripts/notif-init.js';
