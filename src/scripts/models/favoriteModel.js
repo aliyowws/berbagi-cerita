@@ -15,7 +15,3 @@ export async function getFavoriteById(id) {
 export async function removeFavorite(id) {
   return FavoriteDB.delete(id);
 }
-
-export async function removeFavorite(id) {
-  return FavoriteDB.delete(id);
-}

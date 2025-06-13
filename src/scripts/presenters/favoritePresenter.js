@@ -1,5 +1,4 @@
 import favoriteView from '../views/favoriteView.js';
-import { getAllFavorites } from '../models/favoriteModel.js';
 import { getAllFavorites, removeFavorite } from '../models/favoriteModel.js';
 
 export async function renderFavorites() {
