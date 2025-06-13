@@ -13,23 +13,23 @@ import { renderFavorites } from './presenters/favoritePresenter.js';
 const routes = {
   '/': {
     view: homeView,
-    beforeRender: stopCamera,
-    afterRender: renderStories
+    afterRender: renderStories,
+    beforeRender: () => {}  
   },
   '/tambah': {
     view: addStoryView,
-    beforeRender: () => {} , 
-    afterRender: setupAddStory
+    afterRender: setupAddStory,
+    beforeRender: () => {} 
   },
   '/login': {
     view: loginView,
-    beforeRender: stopCamera,
-    afterRender: setupLogin
+    afterRender: setupLogin,
+    beforeRender: () => {}
   },
   '/register': {
     view: registerView,
-    beforeRender: stopCamera,
-    afterRender: setupRegister
+    afterRender: setupRegister,
+    beforeRender: () => {}
   },
   '/favorit': {
     view: {
@@ -40,8 +40,8 @@ const routes = {
         </section>
       `
     },
-    beforeRender: stopCamera,
-    afterRender: renderFavorites
+    afterRender: renderFavorites,
+    beforeRender: () => {}
   }
 };
 
