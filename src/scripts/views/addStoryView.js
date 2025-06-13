@@ -137,9 +137,13 @@ const addStoryView = {
       cameraStream.getTracks().forEach(track => track.stop());
       cameraStream = null;
     }
-    this.video.style.display = 'none';
-    this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.canvas.style.display = 'block';
+    
+    if (this.video) this.video.style.display = 'none';
+    if (this.canvas && this.canvas.getContext) {
+      this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.canvas.style.display = 'block';
+    }
+    
   },
 
   showError(msg) {
