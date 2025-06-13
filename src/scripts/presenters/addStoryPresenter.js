@@ -33,7 +33,7 @@ export function setupAddStory() {
 
         if (!result.error) {
           addStoryView.showSuccess('Cerita berhasil dikirim! Anda akan menerima notifikasi push.');
-          addStoryView.disableCamera(); 
+          await addStoryView.disableCamera(); 
           navigateTo('/');  
         } else {
           addStoryView.showError('Gagal mengirim: ' + result.message);
@@ -48,4 +48,5 @@ export function setupAddStory() {
 
 export function stopCamera() {
   addStoryView.disableCamera();
+  addStoryView.teardown();
 }
