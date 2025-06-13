@@ -30,6 +30,8 @@ const favoriteView = {
             <h3>${story.name}</h3>
             <p>${story.description}</p>
             <small>Dibuat pada: ${createdAt}</small>
+
+            <button class="remove-favorite-btn" data-id="${story.id}" aria-label="Hapus dari Favorit">🗑 Hapus</button>
           </div>
         </article>
       `;
@@ -39,7 +41,18 @@ const favoriteView = {
   showError(message) {
     const container = document.getElementById('favorite-list');
     container.innerHTML = `<p class="error">${message}</p>`;
+  },
+
+  bindRemoveHandler(handler) {
+    const buttons = document.querySelectorAll('.remove-favorite-btn');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        handler(id);
+      });
+    });
   }
+
 };
 
 export default favoriteView;
