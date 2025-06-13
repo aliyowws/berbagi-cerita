@@ -18,7 +18,7 @@ const routes = {
   },
   '/tambah': {
     view: addStoryView,
-    beforeRender: stopCamera, 
+    beforeRender: () => {} , 
     afterRender: setupAddStory
   },
   '/login': {
