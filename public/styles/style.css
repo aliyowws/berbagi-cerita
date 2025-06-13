@@ -203,6 +203,16 @@ article {
   transition: opacity 0.3s ease;
 }
 
+#camera, #snapshot {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin: 1rem auto;
+  display: block;
+}
+
 @media (max-width: 600px) {
   nav a {
     display: block;
