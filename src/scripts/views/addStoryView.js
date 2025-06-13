@@ -65,6 +65,8 @@ const addStoryView = {
     this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
     this.canvas.style.display = 'block';
     this.video.style.display = 'none';
+
+    this.disableCamera();
   },
 
   async _initMap() {
