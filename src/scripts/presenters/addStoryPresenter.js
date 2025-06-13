@@ -3,6 +3,7 @@ import addStoryView from '../views/addStoryView.js';
 import { postStory, createStoryFormData } from '../models/storyApiModel.js';
 import { getToken } from '../models/authModel.js';
 import { navigateTo } from '../router.js';
+import { renderStories } from './homePresenter.js';
 
 export function setupAddStory() {
   const token = getToken();
@@ -32,9 +33,9 @@ export function setupAddStory() {
         const result = await postStory(realFormData, token);
 
         if (!result.error) {
-          addStoryView.showSuccess('Cerita berhasil dikirim! Anda akan menerima notifikasi push.');
-          await addStoryView.disableCamera(); 
+          addStoryView.showSuccess('Cerita berhasil dikirim! Anda akan menerima notifikasi push.'); 
           navigateTo('/');  
+          addStoryView.disableCamera();
         } else {
           addStoryView.showError('Gagal mengirim: ' + result.message);
         }

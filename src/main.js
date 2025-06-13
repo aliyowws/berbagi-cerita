@@ -52,6 +52,7 @@ window.addEventListener('load', () => {
             
             localStorage.removeItem('token');
             localStorage.removeItem('pendingPushSubscription'); // Clear any pending subscription
+            
             alert('Logout berhasil!');
             navigateTo('/login');   
             updateAuthLinks();

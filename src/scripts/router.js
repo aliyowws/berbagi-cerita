@@ -65,6 +65,10 @@ export const router = () => {
     return;
   }
 
+  if (previousHash === '/tambah' && currentHash !== '/tambah') {
+  stopCamera();
+  }
+
   if (route && route.beforeRender) {
     route.beforeRender(); 
   }
