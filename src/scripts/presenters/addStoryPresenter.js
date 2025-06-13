@@ -5,6 +5,12 @@ import { getToken } from '../models/authModel.js';
 import { navigateTo } from '../router.js';
 
 export function setupAddStory() {
+  const token = getToken();
+  if (token) {
+    initPush().catch(err => {
+      console.warn('Push notifikasi setup gagal:', err);
+    });
+  }
   addStoryView.initialize({
     onSubmit: async (formData) => {
       try {
@@ -14,11 +20,19 @@ export function setupAddStory() {
           return;
         }
 
+        const isSubscribed = await isPushSubscribed();
+        if (!isSubscribed) {
+          console.warn('User tidak berlangganan push notification, mencoba subscribe...');
+          await initPush().catch(err => {
+            console.warn('Gagal setup push notification:', err);
+          });
+        }
+
         const realFormData = createStoryFormData(formData);
         const result = await postStory(realFormData, token);
 
         if (!result.error) {
-          addStoryView.showSuccess('Cerita berhasil dikirim!');
+          addStoryView.showSuccess('Cerita berhasil dikirim! Anda akan menerima notifikasi push.');
           addStoryView.disableCamera(); 
           navigateTo('/');  
         } else {

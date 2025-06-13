@@ -8,8 +8,17 @@ export function setupLogin() {
     onSubmit: async ({ email, password }) => {
       try {
         const result = await loginUser(email, password);
-        loginView.showSuccess('Login berhasil!');
-        navigateTo('/tambah'); 
+        
+        if (result.loginResult && result.loginResult.token) {
+          localStorage.setItem('token', result.loginResult.token);
+          
+          window.dispatchEvent(new CustomEvent('userLoggedIn'));
+          
+          loginView.showSuccess('Login berhasil!');
+          navigateTo('/');
+        } else {
+          loginView.showError('Login gagal - token tidak ditemukan.');
+        }
       } catch (error) {
         loginView.showError(error.message || 'Login gagal.');
       }

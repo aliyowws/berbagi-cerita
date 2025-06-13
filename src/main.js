@@ -20,6 +20,15 @@ window.addEventListener('load', () => {
             if (logoutLink) logoutLink.style.display = 'inline';
             if (loginLink) loginLink.style.display = 'none';
             if (registerLink) registerLink.style.display = 'none';
+
+            handlePendingPushSubscription().then(result => {
+                if (result) {
+                    console.log('✅ Pending push subscription berhasil diproses');
+                }
+            }).catch(err => {
+                console.warn('⚠️ Gagal memproses pending push subscription:', err);
+            });
+
         } else {
             if (logoutLink) logoutLink.style.display = 'none';
             if (loginLink) loginLink.style.display = 'inline';
@@ -30,9 +39,19 @@ window.addEventListener('load', () => {
     updateAuthLinks();
 
     if (logoutLink) {
-        logoutLink.addEventListener('click', (e) => {
+        logoutLink.addEventListener('click', async (e) => {
             e.preventDefault();
+            
+            // Unsubscribe from push notifications before logout
+            try {
+                await unsubscribePush();
+                console.log('✅ Push notification unsubscribed');
+            } catch (err) {
+                console.warn('⚠️ Gagal unsubscribe push notification:', err);
+            }
+            
             localStorage.removeItem('token');
+            localStorage.removeItem('pendingPushSubscription'); // Clear any pending subscription
             alert('Logout berhasil!');
             navigateTo('/login');   
             updateAuthLinks();
@@ -58,24 +77,64 @@ window.addEventListener('load', () => {
 
     router();
 
-    if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission().then((permission) => {
+    const initializePushNotifications = async () => {
+        if (!('Notification' in window)) {
+            console.warn('Browser tidak mendukung notifikasi');
+            return;
+        }
+
+        if (Notification.permission === 'default') {
+            const permission = await Notification.requestPermission();
             if (permission === 'granted') {
                 console.log("✅ Izin notifikasi diberikan");
-                initPush();
+                const token = localStorage.getItem('token');
+                if (token) {
+                    await initPush();
+                } else {
+                    console.log("ℹ️ Token belum ada, push notification akan diinisialisasi setelah login");
+                }
             } else {
                 console.warn("❌ Izin notifikasi ditolak atau tidak dipilih");
             }
-        });
-    } else if (Notification.permission === 'granted') {
-        initPush(); 
-    }
+        } else if (Notification.permission === 'granted') {
+            const token = localStorage.getItem('token');
+            if (token) {
+                await initPush();
+            } else {
+                console.log("ℹ️ Token belum ada, push notification akan diinisialisasi setelah login");
+            }
+        } else {
+            console.warn("❌ Izin notifikasi sudah ditolak sebelumnya");
+        }
+    };
 
+    // Register service worker and initialize push notifications
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('✅ Service Worker terdaftar:', reg))
-            .catch(err => console.error('❌ SW gagal terdaftar:', err));
+            .then(reg => {
+                console.log('✅ Service Worker terdaftar:', reg);
+                // Initialize push notifications after service worker is ready
+                return initializePushNotifications();
+            })
+            .then(() => {
+                console.log('✅ Push notification initialization completed');
+            })
+            .catch(err => {
+                console.error('❌ SW gagal terdaftar atau push init gagal:', err);
+            });
+    } else {
+        console.warn('Service Worker tidak didukung di browser ini');
     }
+
+    // Listen for successful login/register events
+    window.addEventListener('userLoggedIn', () => {
+        console.log('User logged in, initializing push notifications...');
+        if (Notification.permission === 'granted') {
+            initPush().catch(err => {
+                console.warn('Gagal initialize push setelah login:', err);
+            });
+        }
+    });
 });
 
 window.addEventListener('beforeunload', stopCamera);

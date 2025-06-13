@@ -18,7 +18,7 @@ const routes = {
   },
   '/tambah': {
     view: addStoryView,
-    beforeRender: () => {}, // Jangan panggil stopCamera di sini
+    beforeRender: () => {}, 
     afterRender: setupAddStory
   },
   '/login': {
@@ -49,7 +49,7 @@ let previousHash = location.hash.slice(1).toLowerCase() || '/';
 
 export const navigateTo = (path) => {
   if (window.location.hash === `#${path}`) {
-    router(); // Tetap render ulang jika hash sama
+    router(); 
   } else {
     window.location.hash = path;
   }
