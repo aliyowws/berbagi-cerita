@@ -6,44 +6,48 @@ import { navigateTo } from '../router.js';
 import { renderStories } from './homePresenter.js';
 
 export function setupAddStory() {
-  const token = getToken();
-  if (token) {
-    initPush().catch(err => {
-      console.warn('Push notifikasi setup gagal:', err);
-    });
-  }
-  addStoryView.initialize({
-    onSubmit: async (formData) => {
-      try {
-        const token = getToken();
-        if (!token) {
-          addStoryView.showError('Token tidak ditemukan. Silakan login terlebih dahulu.');
-          return;
-        }
-
-        const isSubscribed = await isPushSubscribed();
-        if (!isSubscribed) {
-          console.warn('User tidak berlangganan push notification, mencoba subscribe...');
-          await initPush().catch(err => {
-            console.warn('Gagal setup push notification:', err);
-          });
-        }
-
-        const realFormData = createStoryFormData(formData);
-        const result = await postStory(realFormData, token);
-
-        if (!result.error) {
-          addStoryView.showSuccess('Cerita berhasil dikirim! Anda akan menerima notifikasi push.'); 
-          navigateTo('/');  
-          addStoryView.disableCamera();
-        } else {
-          addStoryView.showError('Gagal mengirim: ' + result.message);
-        }
-      } catch (err) {
-        addStoryView.showError('Terjadi kesalahan saat mengirim cerita.');
-        console.error(err);
-      }
+  requestAnimationFrame(() => {
+    const token = getToken();
+    if (token) {
+      initPush().catch(err => {
+        console.warn('Push notifikasi setup gagal:', err);
+      });
     }
+
+    addStoryView.initialize({
+      onSubmit: async (formData) => {
+        try {
+          const token = getToken();
+          if (!token) {
+            addStoryView.showError('Token tidak ditemukan. Silakan login terlebih dahulu.');
+            return;
+          }
+
+          const isSubscribed = await isPushSubscribed();
+          if (!isSubscribed) {
+            console.warn('User tidak berlangganan push notification, mencoba subscribe...');
+            await initPush().catch(err => {
+              console.warn('Gagal setup push notification:', err);
+            });
+          }
+
+          const realFormData = createStoryFormData(formData);
+          const result = await postStory(realFormData, token);
+
+          if (!result.error) {
+            addStoryView.showSuccess('Cerita berhasil dikirim! Anda akan menerima notifikasi push.');
+            addStoryView.disableCamera();
+            navigateTo('/');
+             
+          } else {
+            addStoryView.showError('Gagal mengirim: ' + result.message);
+          }
+        } catch (err) {
+          addStoryView.showError('Terjadi kesalahan saat mengirim cerita.');
+          console.error(err);
+        }
+      }
+    });
   });
 }
 
