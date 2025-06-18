@@ -2,8 +2,8 @@ const CACHE_NAME = 'story-app-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/style.css',
-  '/scripts/index.js',
+  '/public/styles/style.css',
+  '/src/main.js',
 ];
 
 // Install event - cache resources with safer error handling
