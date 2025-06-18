@@ -38,7 +38,7 @@ const addStoryView = {
     this.lonInput = document.getElementById('lon');
     this.mapElement = document.getElementById('map');
 
-    this._initCamera();
+    this.takePhotoButton.onclick = () => this._initCamera();
     this._initMap();
     this._initForm(onSubmit);
   },
