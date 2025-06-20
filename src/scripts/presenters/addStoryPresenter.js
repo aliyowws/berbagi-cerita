@@ -4,7 +4,7 @@ import { postStory, createStoryFormData } from '../models/storyApiModel.js';
 import { getToken } from '../models/authModel.js';
 import { navigateTo } from '../router.js';
 import { renderStories } from './homePresenter.js';
-import { initPush, isPushSubscribed } from '../scripts/notif-init.js';
+import { initPush, isPushSubscribed } from '../notif-init.js';
 
 
 export function setupAddStory() {
