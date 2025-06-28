@@ -48,7 +48,7 @@ window.addEventListener('load', () => {
             e.preventDefault();
             localStorage.removeItem('token');
             alert('Logout berhasil!');
-            navigateTo('/login');   // <-- ganti location.hash dengan navigateTo
+            navigateTo('/login');
             updateAuthLinks();
         });
     }
@@ -70,7 +70,8 @@ window.addEventListener('load', () => {
         updateAuthLinks();
     });
 
-        if ('serviceWorker' in navigator && 'PushManager' in window) {
+    // ✅ Registrasi Service Worker dan Push Notification
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
         navigator.serviceWorker.register('/sw.js')
             .then(async (registration) => {
                 console.log('✅ Service Worker registered');
@@ -88,6 +89,11 @@ window.addEventListener('load', () => {
                     userVisibleOnly: true,
                     applicationServerKey: convertedVapidKey
                 });
+
+                // ✅ Validasi subscription
+                if (!subscription || !subscription.endpoint || !subscription.keys || !subscription.keys.p256dh || !subscription.keys.auth) {
+                    throw new Error('Gagal mendapatkan subscription key: data tidak lengkap');
+                }
 
                 const token = localStorage.getItem('token');
                 if (!token) {
@@ -117,7 +123,38 @@ window.addEventListener('load', () => {
     }
 
     router();
-});
 
+    function handleOfflineFallback() {
+        const mainContent = document.getElementById('main-content');
+        if (!mainContent) return;
+        mainContent.setAttribute('data-original-html', mainContent.innerHTML);
+        mainContent.innerHTML = `
+        <section style="text-align: center; padding: 2rem;">
+            <h2>⚠️ Ups, kamu sedang offline</h2>
+            <p>Konten tidak dapat dimuat. Silakan periksa koneksi internet kamu dan coba lagi.</p>
+        </section>
+        `;
+    }
+
+    function restoreOnlineUI() {
+        const mainContent = document.getElementById('main-content');
+        if (!mainContent) return;
+        const original = mainContent.getAttribute('data-original-html');
+        if (original) {
+        mainContent.innerHTML = original;
+        mainContent.removeAttribute('data-original-html');
+        } else {
+        location.reload();
+        }
+    }
+
+    // ⬇️ Cek kondisi awal dan event listener
+    if (!navigator.onLine) {
+        handleOfflineFallback();
+    }
+
+    window.addEventListener('offline', handleOfflineFallback);
+    window.addEventListener('online', restoreOnlineUI);
+});
 
 window.addEventListener('beforeunload', stopCamera);
