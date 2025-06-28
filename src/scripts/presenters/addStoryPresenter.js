@@ -28,7 +28,8 @@ export function setupAddStory() {
                 type: 'SHOW_NOTIFICATION',
                 title: 'Story berhasil dibuat',
                 options: {
-                  body: `Anda telah membuat story baru dengan deskripsi: ${formData.description}`
+                  body: `Anda telah membuat story baru dengan deskripsi: ${formData.description}`,
+                  icon: '/public/assets/icons/icon-192x192.png'
                 }
               });
             }
