@@ -131,24 +131,33 @@ window.addEventListener('load', () => {
     function handleOfflineFallback() {
         const mainContent = document.getElementById('main-content');
         if (!mainContent) return;
-        mainContent.setAttribute('data-original-html', mainContent.innerHTML);
+
+        if (mainContent.getAttribute('data-offline') === 'true') return;
+
+        if (!mainContent.hasAttribute('data-original-html')) {
+            mainContent.setAttribute('data-original-html', mainContent.innerHTML);
+        }
+
         mainContent.innerHTML = `
-        <section style="text-align: center; padding: 2rem;">
+            <section style="text-align: center; padding: 2rem;">
             <h2>⚠️ Ups, kamu sedang offline</h2>
             <p>Konten tidak dapat dimuat. Silakan periksa koneksi internet kamu dan coba lagi.</p>
-        </section>
+            </section>
         `;
-    }
+        mainContent.setAttribute('data-offline', 'true');
+        }
 
     function restoreOnlineUI() {
         const mainContent = document.getElementById('main-content');
         if (!mainContent) return;
+
         const original = mainContent.getAttribute('data-original-html');
         if (original) {
-        mainContent.innerHTML = original;
-        mainContent.removeAttribute('data-original-html');
+            mainContent.innerHTML = original;
+            mainContent.removeAttribute('data-original-html');
+            mainContent.removeAttribute('data-offline');
         } else {
-        location.reload();
+            location.reload();
         }
     }
 
