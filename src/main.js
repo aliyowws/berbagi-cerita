@@ -89,14 +89,24 @@ window.addEventListener('load', () => {
                 const vapidPublicKey = 'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk';
                 const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
 
-                const subscription = await registration.pushManager.subscribe({
+                let subscription = await registration.pushManager.getSubscription();
+
+                if (!subscription) {
+                subscription = await registration.pushManager.subscribe({
                     userVisibleOnly: true,
                     applicationServerKey: convertedVapidKey
                 });
+                }
 
-                // ✅ Validasi subscription
-                if (!subscription || !subscription.endpoint || !subscription.keys || !subscription.keys.p256dh || !subscription.keys.auth) {
-                    throw new Error('Gagal mendapatkan subscription key: data tidak lengkap');
+                if (
+                !subscription ||
+                !subscription.endpoint ||
+                !subscription.keys ||
+                !subscription.keys.p256dh ||
+                !subscription.keys.auth
+                ) {
+                console.warn('Subscription tidak lengkap atau gagal.');
+                return;
                 }
 
                 const token = localStorage.getItem('token');
