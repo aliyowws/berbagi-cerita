@@ -68,6 +68,10 @@ window.addEventListener('load', () => {
     window.addEventListener('hashchange', () => {
         router();
         updateAuthLinks();
+
+        if (!navigator.onLine) {
+            handleOfflineFallback();
+        }
     });
 
     // ✅ Registrasi Service Worker dan Push Notification
